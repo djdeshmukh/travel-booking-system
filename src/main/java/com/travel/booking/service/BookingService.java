@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.travel.booking.entity.*;
 import com.travel.booking.repository.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travel.booking.dto.*;
 
 @Service
@@ -36,5 +37,16 @@ public class BookingService {
         b.setStatus("CONFIRMED");
 
         return bookingRepo.save(b);
+    }
+
+    public String addTrip(TripRequest req) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Trip trip = mapper.convertValue(req, Trip.class);
+
+        tripRepo.save(trip);
+
+        return "Trip added.";
     }
 }
