@@ -22,14 +22,15 @@ public class BookingService {
     @Transactional
     public Booking book(BookingRequest req) {
 
-        Trip trip = tripRepo.findById(req.getTripId())
-                .orElseThrow(() -> new RuntimeException("Trip not found"));
+    	   Trip trip = tripRepo.findByIdForUpdate(req.getTripId())
+    	            .orElseThrow(() -> new RuntimeException("Trip not found"));
 
-        if(trip.getAvailableSeats() < req.getSeats()) {
-            throw new RuntimeException("Seats not available");
-        }
+    	    if (trip.getAvailableSeats() < req.getSeats()) {
+    	        throw new RuntimeException("Seats not available");
+    	    }
 
-        trip.setAvailableSeats(trip.getAvailableSeats() - req.getSeats());
+    	    trip.setAvailableSeats(
+    	            trip.getAvailableSeats() - req.getSeats());
 
         Booking b = new Booking();
         b.setTrip(trip);
